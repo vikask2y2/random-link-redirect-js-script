@@ -1,0 +1,32 @@
+// This script randomly selects and opens a link from the const links section, then pauses execution for the rest of the day. It automatically resets at midnight. You can customize it by adding or removing links based on your requirements.
+
+<script>
+  const links = [
+    "https://example.com/",
+    "https://example.com/1/",
+    "https://example.com/2/",
+    "https://example.com/3/"
+  ];
+
+  function openRandomLink() {
+    const lastOpened = localStorage.getItem("lastOpenedTime");
+    const today = new Date().toDateString(); // Get current date as a string
+
+    if (lastOpened === today) {
+      console.log("You have already clicked today. Try again tomorrow!");
+      return; // Stop execution if already clicked today
+    }
+
+    // Select and open a random link
+    const randomLink = links[Math.floor(Math.random() * links.length)];
+    window.open(randomLink, "_blank");
+
+    // Store today's date in local storage to prevent further clicks today
+    localStorage.setItem("lastOpenedTime", today);
+
+    // Remove event listener after one click
+    document.removeEventListener("click", openRandomLink);
+  }
+
+  document.addEventListener("click", openRandomLink);
+</script>
