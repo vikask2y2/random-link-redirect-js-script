@@ -1,3 +1,4 @@
+//A cooldown period of 10 hours after 3 activations
 
 <script>
   const links = [
