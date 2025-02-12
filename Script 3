@@ -1,0 +1,59 @@
+
+<script>
+  const links = [
+    "https://example.com/",
+    "https://example.com/1/",
+    "https://example.com/2/",
+    "https://example.com/3/"
+  ];
+
+  function shouldRunScript() {
+    const lastUsedTime = localStorage.getItem("lastUsedTime");
+    const visitCount = parseInt(localStorage.getItem("visitCount")) || 0;
+    const lastRunDate = localStorage.getItem("lastRunDate");
+    const now = new Date();
+    const today = now.toDateString();
+    
+    // Check if 10-hour cooldown is over
+    if (lastUsedTime) {
+      const lastUsedTimestamp = parseInt(lastUsedTime);
+      if (now.getTime() - lastUsedTimestamp < 10 * 60 * 60 * 1000) {
+        console.log("Cooldown active, script paused.");
+        return false;
+      } else {
+        // Reset visit count after cooldown
+        localStorage.setItem("visitCount", "0");
+      }
+    }
+
+    // If it's a new day, reset visit count
+    if (lastRunDate !== today) {
+      localStorage.setItem("visitCount", "0");
+      localStorage.setItem("lastRunDate", today);
+    }
+
+    // Only run script for 3 alternating visits (1st, 3rd, 5th)
+    return visitCount % 2 === 0 && visitCount < 6;
+  }
+
+  function openRandomLink() {
+    if (!shouldRunScript()) return;
+
+    // Pick a random link and open it
+    const randomLink = links[Math.floor(Math.random() * links.length)];
+    window.open(randomLink, "_blank");
+
+    // Update visit count
+    let visitCount = parseInt(localStorage.getItem("visitCount")) || 0;
+    visitCount++;
+    localStorage.setItem("visitCount", visitCount.toString());
+
+    // If 3 activations are done (1st, 3rd, 5th visit), start cooldown
+    if (visitCount >= 6) {
+      localStorage.setItem("lastUsedTime", new Date().getTime().toString());
+      console.log("3 activations done. Script paused for 10 hours.");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", openRandomLink);
+</script>
