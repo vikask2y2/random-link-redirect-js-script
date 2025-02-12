@@ -1,0 +1,19 @@
+// This script randomly selects and opens one link from the const links section. You can customize it by adding or removing links based on your requirements.
+
+<script>
+  const links = [
+    "https://example.com/",
+    "https://example.com/1/",
+    "https://example.com/2/",
+    "https://example.com/3/"
+  ];
+
+  function openRandomLink() {
+    const randomLink = links[Math.floor(Math.random() * links.length)];
+    window.open(randomLink, '_blank');
+    document.removeEventListener('click', openRandomLink);
+  }
+
+  document.addEventListener('click', openRandomLink);
+
+</script>
